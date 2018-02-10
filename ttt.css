@@ -1,0 +1,53 @@
+/* 基本設定 */
+body, input, select{
+  font-family: "メイリオ", "ＭＳ ゴシック", monospace;
+  font-size: 16px;
+}
+
+#list_sections input{
+  font-family: "メイリオ", "ＭＳ ゴシック", monospace;
+  font-size: 12px;
+  height: 24px;
+}
+
+textarea{
+  font-family: "メイリオ", "ＭＳ ゴシック", monospace;
+  font-size: 14px;
+}
+
+/* レイヤー */
+.layer{
+  visibility: hidden;
+  position: absolute;
+  left: 8px; top: 80px;
+  width: 720px; height: 640px;
+  border: 1px #cccccc solid;
+  padding: 8px 12px;
+}
+/* 中央揃え */
+.center{
+  text-align: center;
+}
+/* 小さい文字 */
+.small{
+  font-size: 12px;
+}
+
+#title{
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "メイリオ", "ＭＳ ゴシック", monospace;
+}
+#list_sections{
+  background-color: #eef4ff;
+  height: 1050px;
+}
+#list_problems{
+  background-color: #eef4ff;
+}
+#perform{
+  background-color: #eef4ff;
+}
+#preferences{
+  background-color: #eef4ff;
+}
