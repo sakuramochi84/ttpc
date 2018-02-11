@@ -46,21 +46,12 @@ var gRens;            // 継続中の REN 数
 var gIsReadyToB2b;    // 次が BACK to BACK になりうる?
 
 /*----------------------------------------------------------------------------------------
- ☆★ 定数一覧 ★☆
-----------------------------------------------------------------------------------------*/
-const cDumpGuideData = true;  // ガイド配列ダンプ用
-
-/*----------------------------------------------------------------------------------------
  ☆★ 各問題へのアクセス設定 ★☆
 
  問題データは problem.js 等に記載されています。
 ----------------------------------------------------------------------------------------*/
-var gProblems = [];
-for(var i =   0; i < 870; i++) gProblems.push(new Problem(i));
-
-var gProgmeType = 11; 
-var gProgmeIds = [];
-for(var i =   0; i < 14; i++) gProgmeIds[i] = ProblemIds(i);
+var gProblems = getProblems();
+var gCurProgmeIdList = [];
 
 /*----------------------------------------------------------------------------------------
  ☆★ 初期化 ★☆
@@ -148,8 +139,9 @@ function SetupScene(scene){
   case 'perform_cleared':
     Refresh();
     gCurUseGuideFlg = false;
-    gProblems[gCurProblem.id].cleared = true;
-    Save('Prg' + gCurProblem.id, '1');
+    var curProblemId = gCurProgmeIdList[gCurProblemId];
+    gProblems[curProblemId].cleared = true;
+    Save('Prg' + curProblemId, '1');
     Say('perform_caption', 'クリア！');
     break;
   case 'perform_guide':
@@ -234,7 +226,7 @@ function PerformScene(scene){
 ----------------------------------------------------------------------------------------*/
 function PrepareProblem(){
 
-  var curProblemId = gProgmeIds[gProgmeType][gCurProblemId]
+  var curProblemId = gCurProgmeIdList[gCurProblemId];
   gCurProblem = gProblems[curProblemId];
 
   // ノルマ配列をディープコピー
@@ -277,8 +269,9 @@ function PrepareProblem(){
  ☆★ 問題タイトル表示 ★☆
 ----------------------------------------------------------------------------------------*/
 function DisplayCaption(){
-  var curProblemId = gProgmeIds[gProgmeType][gCurProblemId];
-  var caption = " " + String(Number(gCurProblemId) + 1) + "/" + gProgmeIds[gProgmeType].length + "  ";
+  var curProblemId = gCurProgmeIdList[gCurProblemId];
+//  var caption = " " + String(Number(gCurProblemId) + 1) + "/" + gCurProgmeIdList.length + "  ";
+  var caption = SectionTitle(gCurSectionId) + "       " +((gCurProblemId) + 1) + "/" + gCurProgmeIdList.length + "     ";
   caption += gCurProblem.caption;
   Say("perform_caption", caption);
 }
@@ -332,56 +325,62 @@ function SceneSelectSection(){
   }
   if(gButton.match(/^section[0-9]+$/)){
     gCurSectionId = parseInt(gButton.substring(7)) - 1;
-    gCurProblemId = 0; 
-    
+    gCurProblemId = 0;
+
     switch(gButton){
-    case 'section1':
-      gProgmeType = 0;  /* I 縦置き （ガイドあり）*/
+    case 'section1':  /* テンプレを組んでみよう */
+      gCurProgmeIdList = getProblemIdList(WARMING_UP);
       break;
-    case 'section2':
-      gProgmeType = 1;  /* I 縦置き */
+    case 'section2':  /* I 縦置き （ガイドあり）*/
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_VERTICAL);
       break;
-    case 'section3':
-      gProgmeType = 2;  /* 初手 I ミノ１段目（ガイドあり） */
+    case 'section3':  /* I 縦置き ランダム 30問 */
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_VERTICAL))).slice(0,30);
       break;
-    case 'section4':
-      gProgmeType = 3;  /* 初手 I ミノ１段目 */
+    case 'section4':  /* 初手 I ミノ１段目（ガイドあり） */
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_1);
       break;
-    case 'section5':
-      gProgmeType = 4;  /* 全部寝かせ（ガイドあり） */
+    case 'section5':  /* 初手 I ミノ１段目 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_1));
       break;
-    case 'section6':
-      gProgmeType = 5;  /* 全部寝かせ */
+    case 'section6':  /* 全部寝かせ（ガイドあり） */
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_LAYDOWN);
       break;
-    case 'section7':
-      gProgmeType = 6;  /* I I L O（ガイドあり） */
+    case 'section7':  /* 全部寝かせ */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_LAYDOWN));
       break;
-    case 'section8':
-      gProgmeType = 7;  /* I I L O */
+    case 'section8':  /* I I L O（ガイドあり） */
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_IILO);
       break;
-    case 'section9':
-      gProgmeType = 8;  /* 初手 I ミノ3段目（ガイドあり） */
+    case 'section9':  /* I I L O */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_IILO));
       break;
-    case 'section10':
-      gProgmeType = 9;  /* 初手 I ミノ3段目 */
+    case 'section10':  /* 初手 I ミノ3段目（ガイドあり） */
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_3);
       break;
-    case 'section11':
-      gProgmeType = 10;  /* LSIO (ガイドあり)*/
+    case 'section11':  /* 初手 I ミノ3段目 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_3));
       break;
-    case 'section12':
-      gProgmeType = 11;  /* LSIO  */
+    case 'section12':  /* LSIO (ガイドあり)*/
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_LSIO);
       break;
-    case 'section13':
-      gProgmeType = 12;  /* ランダム100問 */
+    case 'section13':  /* LSIO  */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_LSIO));
       break;
-    case 'section14':
-      gProgmeType = 13;  /* 全711問 */
+    case 'section14':  /* ランダム 30問 */
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840))).slice(0,30);
       break;
-    case 'section15':
-      gProgmeType = 14;  /* 全問題 */
+    case 'section15':  /* Iミノ縦置き 全514問 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_VERTICAL));
+      break;
+    case 'section16':  /* 全711問 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
+      break;
+    case 'section17':  /* そのほかの消し方 */
+      gCurProgmeIdList = getProblemIdList(GUIDANCE_OTHER_WISE);
       break;
     default:
-      gProgmeType = 14;
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
       break;
     }
 
@@ -473,7 +472,7 @@ function ScenePerformFalling(){
         gLandingCount = NATURAL_DROP_SPAN;
       }else{
         // ガイド配列ダンプ
-        if(cDumpGuideData){
+        if(DUMP_GUIDE_DATA){
           console.log("G(%s, %d, %d, %d)", gCurMino, gCurDir, gCurX, gCurY-3);
         }
         // 着地
@@ -1149,7 +1148,7 @@ function ScenePerformCleared(){
  「問題10」ならばセクション一覧へ、それ以外なら次の問題に進みます。
 ----------------------------------------------------------------------------------------*/
 function AfterClear(){
-  if(gCurProblemId >= gProgmeIds[gProgmeType].length - 1) gScene = 'select_section';
+  if(gCurProblemId >= gCurProgmeIdList.length - 1) gScene = 'select_section';
   else{
     gCurProblemId++;
     gScene = 'perform';
