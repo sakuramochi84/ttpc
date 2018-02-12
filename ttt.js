@@ -379,6 +379,9 @@ function SceneSelectSection(){
     case 'section17':  /* ÇªÇÃÇŸÇ©ÇÃè¡Çµï˚ */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_OTHER_WISE);
       break;
+    case 'section18':  /* ëSñ‚É~ÉâÅ[ */
+      gCurProgmeIdList = getProblemIdList(PROB840_MIRROR);
+      break;
     default:
       gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
       break;
