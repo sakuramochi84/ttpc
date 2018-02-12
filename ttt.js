@@ -328,6 +328,29 @@ function SceneSelectSection(){
     gCurProblemId = 0;
 
     switch(gButton){
+      case  0: return '1  テンプレを組んでみよう'; break;
+      case  1: return '2  「Iミノ縦置き」 14パターン'; break;
+      case  2: return '3  「Iミノ縦置き」 20問'; break;
+      case  3: return '4  「初手 I ミノ１段目型」 6パターン'; break;
+      case  4: return '5  「初手 I ミノ１段目型」 20問'; break;
+      case  5: return '6  「全部寝かせ型」 4パターン'; break;
+      case  6: return '7  「全部寝かせ型」 20問'; break;
+      case  7: return '8  「IILO型」 2パターン'; break;
+      case  8: return '9  「IILO型」 10問'; break;
+      case  9: return '10 「初手Iミノ3段目型」 1パターン'; break;
+      case 10: return '11 「初手Iミノ3段目型」 20問'; break;
+      case 11: return '12 中間テスト 20問'; break;
+      case 12: return '13 「LSIO型」 全1パターン'; break;
+      case 13: return '14 「LSIO型」 12問'; break;
+      case 14: return '15 期末テスト 30問'; break;
+      case 15: return '16 卒業テスト（ミラー問題を含む） 100問'; break;
+      case 16: return '17 そのほかの消し方'; break;
+      case 17: return '18 「Iミノ縦置き」 全514問'; break;
+      case 18: return '19 「Iミノ横置き」 全196問'; break;
+      case 19: return '20 全711問'; break;
+      case 20: return '21 全711問ミラー(内容未チェック)'; break;
+
+
     case 'section1':  /* テンプレを組んでみよう */
       gCurProgmeIdList = getProblemIdList(WARMING_UP);
       break;
@@ -335,55 +358,74 @@ function SceneSelectSection(){
       gCurProgmeIdList = getProblemIdList(GUIDANCE_VERTICAL);
       break;
     case 'section3':  /* I 縦置き ランダム 30問 */
-      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_VERTICAL))).slice(0,30);
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_VERTICAL))).slice(0,20);
       break;
     case 'section4':  /* 初手 I ミノ１段目（ガイドあり） */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_1);
       break;
     case 'section5':  /* 初手 I ミノ１段目 */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_1));
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_HORIZONTAL_1))).slice(0,20);
       break;
     case 'section6':  /* 全部寝かせ（ガイドあり） */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_LAYDOWN);
       break;
     case 'section7':  /* 全部寝かせ */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_LAYDOWN));
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_HORIZONTAL_LAYDOWN))).slice(0,20);
       break;
     case 'section8':  /* I I L O（ガイドあり） */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_IILO);
       break;
     case 'section9':  /* I I L O */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_IILO));
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_HORIZONTAL_IILO))).slice(0,10);
       break;
     case 'section10':  /* 初手 I ミノ3段目（ガイドあり） */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_HORIZONTAL_3);
       break;
     case 'section11':  /* 初手 I ミノ3段目 */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_HORIZONTAL_3));
+      gCurProgmeIdList = (shuffle(getProblemIdList(PROB840_HORIZONTAL_3))).slice(0,20);
       break;
-    case 'section12':  /* LSIO (ガイドあり)*/
+    case 'section12':  /* 中間テスト 20問 */
+      var array1 = shuffle(getProblemIdList(PROB840_HORIZONTAL_1));
+      var array2 = shuffle(getProblemIdList(PROB840_HORIZONTAL_LAYDOWN));
+      var array3 = shuffle(getProblemIdList(PROB840_HORIZONTAL_IILO));
+      var array4 = shuffle(getProblemIdList(PROB840_HORIZONTAL_3));
+      gCurProgmeIdList = (shuffle(((array1.concat(array2)).concat(array3)).concat(array4))).slice(0,20);
+      break;
+    case 'section13':  /* LSIO (ガイドあり)*/
       gCurProgmeIdList = getProblemIdList(GUIDANCE_LSIO);
       break;
-    case 'section13':  /* LSIO  */
+    case 'section14':  /* LSIO  */
       gCurProgmeIdList = shuffle(getProblemIdList(PROB840_LSIO));
       break;
-    case 'section14':  /* ランダム 30問 */
+    case 'section15':  /* 期末テスト 30問 */
       gCurProgmeIdList = (shuffle(getProblemIdList(PROB840))).slice(0,30);
       break;
-    case 'section15':  /* Iミノ縦置き 全514問 */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_VERTICAL));
-      break;
-    case 'section16':  /* 全711問 */
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
+    case 'section16':  /* 卒業テスト */
+      var array1 = (shuffle(getProblemIdList(PROB840))).slice(0,50);
+      var array2 = (shuffle(getProblemIdList(PROB840_MIRROR))).slice(0,50);
+      gCurProgmeIdList = shuffle(array1.concat(array2));
       break;
     case 'section17':  /* そのほかの消し方 */
       gCurProgmeIdList = getProblemIdList(GUIDANCE_OTHER_WISE);
       break;
-    case 'section18':  /* 全問ミラー */
-      gCurProgmeIdList = getProblemIdList(PROB840_MIRROR);
+    case 'section18':  /* I 縦置き ランダム 514問 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_VERTICAL));
+      break;
+    case 'section19':  /* I 横置き ランダム 196問 */
+      var array1 = shuffle(getProblemIdList(PROB840_HORIZONTAL_1));
+      var array2 = shuffle(getProblemIdList(PROB840_HORIZONTAL_LAYDOWN));
+      var array3 = shuffle(getProblemIdList(PROB840_HORIZONTAL_IILO));
+      var array4 = shuffle(getProblemIdList(PROB840_HORIZONTAL_3));
+      gCurProgmeIdList = shuffle(((array1.concat(array2)).concat(array3)).concat(array4));
+      break;
+    case 'section20':  /* 全711問 */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
+      break;
+    case 'section21':  /* 全問ミラー */
+      gCurProgmeIdList = shuffle(getProblemIdList(PROB840_MIRROR));
       break;
     default:
-      gCurProgmeIdList = shuffle(getProblemIdList(PROB840));
+      gCurProgmeIdList = [];/* ここに入ると、画面が白色になって落ちるように見えるはず */
       break;
     }
 
