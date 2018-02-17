@@ -51,3 +51,10 @@ textarea{
 #preferences{
   background-color: #eef4ff;
 }
+
+.clear{
+  visibility:hidden;
+  width:17px;
+  height:17px;
+}
+

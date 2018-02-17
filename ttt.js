@@ -52,6 +52,10 @@ var gIsReadyToB2b;    // 次が BACK to BACK になりうる?
 ----------------------------------------------------------------------------------------*/
 var gProblems = getProblems();
 var gCurProgmeIdList = [];
+var gProblemsCleared = [];
+for(var i = 0; i < SECTION_NUM; i++){
+  gProblemsCleared[i] = false;
+}
 
 /*----------------------------------------------------------------------------------------
  ☆★ 初期化 ★☆
@@ -92,8 +96,8 @@ function LoadData(){
   gKeys.push(Load('Hold', DEFAULT_KEY_HOLD));
   gKeys.push(Load('Guide', DEFAULT_KEY_GUIDE));
   // 進捗の読込
-  for(var i = 0; i < gProblems.length; i++){
-    gProblems[i].cleared = (Load('Prg' + i, '0') == '1');
+  for(var i = 0; i < SECTION_NUM; i++){
+    gProblemsCleared[i] = (Load('Prg' + i, '0') == '1');
   }
 }
 /*----------------------------------------------------------------------------------------
@@ -119,6 +123,7 @@ function SetupScene(scene){
   switch(scene){
   case 'select_section':
     gLyrSections.Show();
+    RefreshProblemButtons();
     gCurUseGuideFlg = false;
     break;
   case 'perform':
@@ -140,8 +145,6 @@ function SetupScene(scene){
     Refresh();
     gCurUseGuideFlg = false;
     var curProblemId = gCurProgmeIdList[gCurProblemId];
-    gProblems[curProblemId].cleared = true;
-    Save('Prg' + curProblemId, '1');
     Say('perform_caption', 'クリア！');
     break;
   case 'perform_guide':
@@ -156,6 +159,7 @@ function SetupScene(scene){
       document.getElementById(gSelectForms[i]).value = gKeys[i];
     }
     gLyrPreferences.Show();
+    window.scroll(0, 0);    // 一番上へスクロール
     break;
   default:
     gScene = 'select_section';
@@ -315,6 +319,15 @@ function RefreshSectionTitle(){
   Say('section_title', SectionTitle(gCurSectionId));
 }
 /*----------------------------------------------------------------------------------------
+ ☆★ クリア状況をボタンに反映 ★☆
+----------------------------------------------------------------------------------------*/
+function RefreshProblemButtons(){
+  for(var i = 0; i < SECTION_NUM; i++){
+    if(gProblemsCleared[i])  ShowImage('clear'+ i);
+
+  }
+}
+/*----------------------------------------------------------------------------------------
  ☆★ シーン: セクション選択 ★☆
 ----------------------------------------------------------------------------------------*/
 function SceneSelectSection(){
@@ -328,29 +341,6 @@ function SceneSelectSection(){
     gCurProblemId = 0;
 
     switch(gButton){
-      case  0: return '1  テンプレを組んでみよう'; break;
-      case  1: return '2  「Iミノ縦置き」 14パターン'; break;
-      case  2: return '3  「Iミノ縦置き」 20問'; break;
-      case  3: return '4  「初手 I ミノ１段目型」 6パターン'; break;
-      case  4: return '5  「初手 I ミノ１段目型」 20問'; break;
-      case  5: return '6  「全部寝かせ型」 4パターン'; break;
-      case  6: return '7  「全部寝かせ型」 20問'; break;
-      case  7: return '8  「IILO型」 2パターン'; break;
-      case  8: return '9  「IILO型」 10問'; break;
-      case  9: return '10 「初手Iミノ3段目型」 1パターン'; break;
-      case 10: return '11 「初手Iミノ3段目型」 20問'; break;
-      case 11: return '12 中間テスト 20問'; break;
-      case 12: return '13 「LSIO型」 全1パターン'; break;
-      case 13: return '14 「LSIO型」 12問'; break;
-      case 14: return '15 期末テスト 30問'; break;
-      case 15: return '16 卒業テスト（ミラー問題を含む） 100問'; break;
-      case 16: return '17 そのほかの消し方'; break;
-      case 17: return '18 「Iミノ縦置き」 全514問'; break;
-      case 18: return '19 「Iミノ横置き」 全196問'; break;
-      case 19: return '20 全711問'; break;
-      case 20: return '21 全711問ミラー(内容未チェック)'; break;
-
-
     case 'section1':  /* テンプレを組んでみよう */
       gCurProgmeIdList = getProblemIdList(WARMING_UP);
       break;
@@ -1193,7 +1183,11 @@ function ScenePerformCleared(){
  「問題10」ならばセクション一覧へ、それ以外なら次の問題に進みます。
 ----------------------------------------------------------------------------------------*/
 function AfterClear(){
-  if(gCurProblemId >= gCurProgmeIdList.length - 1) gScene = 'select_section';
+  if(gCurProblemId >= gCurProgmeIdList.length - 1){
+    gScene = 'select_section';
+    gProblemsCleared[gCurSectionId] = true;
+    Save('Prg' + curSectionId, '1');
+  }
   else{
     gCurProblemId++;
     gScene = 'perform';
@@ -1246,6 +1240,7 @@ function SavePreferences(){
   Save('RotateRight', gKeys[4]);
   Save('RotateLeft', gKeys[5]);
   Save('Hold', gKeys[6]);
+  Save('Guide', gKeys[7]);
   return true;
 }
 /*----------------------------------------------------------------------------------------
