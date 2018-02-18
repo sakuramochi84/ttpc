@@ -362,7 +362,7 @@ function Say(textBoxId, text){
  ™š •\¦ š™
 ----------------------------------------------------------------------------------------*/
 function ShowImage(imageId){
-  document.getElementById(imageId).style.visibility = "visible";
+  document.getElementById(imageId).style.display = "inline";
 }
 /*----------------------------------------------------------------------------------------
  ™š ‰æ‘œ‚Ì•\¦ š™

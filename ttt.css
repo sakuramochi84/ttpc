@@ -40,7 +40,7 @@ textarea{
 }
 #list_sections{
   background-color: #eef4ff;
-  height: 1550px;
+  height: 1720px;
 }
 #list_problems{
   background-color: #eef4ff;
@@ -53,8 +53,7 @@ textarea{
 }
 
 .clear{
-  visibility:hidden;
+  display:none;
   width:17px;
   height:17px;
 }
-
