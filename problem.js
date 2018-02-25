@@ -996,6 +996,8 @@ function ProblemOtherwise(id){
     case   24:    this.ingredients = [[],S,Z,J,T];    this.guides = [G(S, 0, 4, 17),G(Z, 3, 3, 16),G(J, 0, 3, 18),G(T, 2, 5, 17)];    break;
     case   25:    this.ingredients = [[],S,T,J,L];    this.guides = [G(S, 0, 3, 18),G(T, 1, 2, 16),G(J, 1, 5, 17),G(L, 3, 4, 17)];    break;
     case   26:    this.ingredients = [[],S,T,O,I];    this.guides = [G(S, 0, 3, 18),G(T, 1, 2, 16),G(O, 0, 4, 18),G(I, 0, 4, 18)];    break;
+    case   27:    this.ingredients = [[],I,T,J,S];    this.guides = [G(I, 3, 2, 16),G(T, 2, 4, 16),G(J, 1, 3, 17),G(S, 2, 5, 17)];    break;
+
     default:
     // 初期マトリックス。デッドライン以上は含めない
     this.initialBlocks = [[0,0,0,0,0,0,0,0,0,0],
